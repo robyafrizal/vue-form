@@ -1,0 +1,599 @@
+<template>
+  <div class="form-container">
+    <h2>Formulir Penerima Bantuan</h2>
+    <form @submit.prevent="submitForm">
+      <div class="form-group">
+        <label for="name">Nama</label>
+        <input
+          v-model="formData.name"
+          type="text"
+          id="name"
+          class="form-control"
+        />
+        <span v-if="errors.name">{{ errors.name }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="idCard">NIK</label>
+        <input
+          v-model="formData.idCard"
+          type="text"
+          id="idCard"
+          class="form-control"
+        />
+        <span v-if="errors.idCard">{{ errors.idCard }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="kk">Nomor Kartu Keluarga</label>
+        <input v-model="formData.kk" type="text" id="kk" class="form-control" />
+        <span v-if="errors.kk">{{ errors.kk }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="idCardImage">Foto KTP</label>
+        <input
+          type="file"
+          id="idCardImage"
+          @change="validateImage"
+          accept="image/jpeg, image/png, image/bmp"
+          class="form-control"
+        />
+        <span v-if="errors.idCardImage">{{ errors.idCardImage }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="kkImage">Foto Kartu Keluarga</label>
+        <input
+          type="file"
+          id="kkImage"
+          @change="validateImage"
+          accept="image/jpeg, image/png, image/bmp"
+          class="form-control"
+        />
+        <span v-if="errors.kkImage">{{ errors.kkImage }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="age">Umur</label>
+        <input
+          v-model="formData.age"
+          type="number"
+          id="age"
+          class="form-control"
+        />
+        <span v-if="errors.age">{{ errors.age }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="gender">Jenis Kelamin</label>
+        <select v-model="formData.gender" id="gender" class="form-control">
+          <option disabled value="">Pilih Jenis Kelamin</option>
+          <option value="Laki-Laki">Laki-Laki</option>
+          <option value="Perempuan">Perempuan</option>
+        </select>
+        <span v-if="errors.gender">{{ errors.gender }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="province">Provinsi</label>
+        <select
+          v-model="formData.province"
+          @change="fetchCities"
+          class="form-control"
+        >
+          <option value="" disabled>Pilih Provinsi</option>
+          <option
+            v-for="province in provinces"
+            :key="province.id"
+            :value="province.id"
+          >
+            {{ province.name }}
+          </option>
+        </select>
+        <span v-if="errors.province">{{ errors.province }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="city">Kota</label>
+        <select
+          v-model="formData.city"
+          @change="fetchDistricts"
+          :disabled="!cities.length"
+          class="form-control"
+        >
+          <option value="" disabled>Pilih Kabupaten/Kota</option>
+          <option v-for="city in cities" :key="city.id" :value="city.id">
+            {{ city.name }}
+          </option>
+        </select>
+        <span v-if="errors.city">{{ errors.city }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="district">Kecamatan</label>
+        <select
+          v-model="formData.district"
+          @change="fetchVillages"
+          :disabled="!districts.length"
+          class="form-control"
+        >
+          <option value="" disabled>Pilih Kecamatan</option>
+          <option
+            v-for="district in districts"
+            :key="district.id"
+            :value="district.id"
+          >
+            {{ district.name }}
+          </option>
+        </select>
+        <span v-if="errors.district">{{ errors.district }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="village">Kelurahan</label>
+        <select
+          v-model="formData.village"
+          :disabled="!villages.length"
+          class="form-control"
+        >
+          <option value="" disabled>Pilih Kelurahan</option>
+          <option
+            v-for="village in villages"
+            :key="village.id"
+            :value="village.id"
+          >
+            {{ village.name }}
+          </option>
+        </select>
+        <span v-if="errors.village">{{ errors.village }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="address">Alamat</label>
+        <input
+          v-model="formData.address"
+          type="text"
+          id="address"
+          placeholder="Masukkan Alamat"
+          class="form-control"
+        />
+        <span v-if="errors.address">{{ errors.address }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="rt">RT</label>
+        <input
+          v-model="formData.rt"
+          type="number"
+          id="rt"
+          placeholder="Masukkan RT"
+          class="form-control"
+        />
+        <span v-if="errors.rt">{{ errors.rt }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="rw">RW</label>
+        <input
+          v-model="formData.rw"
+          type="number"
+          id="rw"
+          placeholder="Masukkan RT"
+          class="form-control"
+        />
+        <span v-if="errors.rw">{{ errors.rw }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="incomeBefore">Pendapatan Sebelum Pandemi</label>
+        <input
+          v-model="formData.incomeBefore"
+          type="number"
+          id="incomeBefore"
+          placeholder="Pendapatan Sebelum Pandemi"
+          class="form-control"
+        />
+        <span v-if="errors.incomeBefore">{{ errors.incomeBefore }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="incomeAfter">Pendapatan Setelah Pandemi</label>
+        <input
+          v-model="formData.incomeAfter"
+          type="number"
+          id="incomeAfter"
+          placeholder="Pendapatan Setelah Pandemi"
+          class="form-control"
+        />
+        <span v-if="errors.incomeAfter">{{ errors.incomeAfter }}</span>
+      </div>
+
+      <div class="form-group">
+        <label for="reason">Alasan Membutuhkan Bantuan</label>
+        <select v-model="formData.reason" id="reason" class="form-control">
+          <option disabled value="">Alasan mengapa butuh bantuan?</option>
+          <option value="Kehilangan pekerjaan">Kehilangan pekerjaan</option>
+          <option value="Kepala keluarga">Kepala keluarga</option>
+          <option value="Tergolong fakir/miskin">Tergolong fakir/miskin</option>
+          <option value="Tertimpa musibah">Tertimpa musibah</option>
+        </select>
+        <span v-if="errors.reason">{{ errors.reason }}</span>
+      </div>
+
+      <div class="form-group">
+        <label>
+          <input v-model="formData.confirmation" type="checkbox" />
+          “Saya menyatakan bahwa data yang diisikan adalah benar dan siap
+          mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data
+          tersebut.”
+        </label>
+        <span v-if="errors.confirmation">{{ errors.confirmation }}</span>
+      </div>
+
+      <div v-if="isLoading" class="loading">Loading...</div>
+
+      <div v-if="serverError" class="error">{{ serverError }}</div>
+
+      <button type="submit" class="submit-button" :disabled="isLoading">
+        Submit
+      </button>
+    </form>
+  </div>
+</template>
+
+<script>
+import axios from "axios";
+
+export default {
+  data() {
+    return {
+      formData: {
+        name: "",
+        idCard: "",
+        kk: "",
+        idCardImage: null,
+        kkImage: null,
+        age: "",
+        gender: "",
+        province: "",
+        city: "",
+        district: "",
+        village: "",
+        address: "",
+        rt: null,
+        rw: null,
+        incomeBefore: null,
+        incomeAfter: null,
+        reason: "",
+        confirmation: false,
+      },
+      provinces: [],
+      cities: [],
+      districts: [],
+      villages: [],
+      errors: {},
+      isLoading: false,
+      serverError: "",
+    };
+  },
+  mounted() {
+    this.fetchProvinces();
+  },
+  methods: {
+    async fetchProvinces() {
+      try {
+        const response = await axios.get(
+          "https://www.emsifa.com/api-wilayah-indonesia/api/provinces.json"
+        );
+        this.provinces = response.data;
+      } catch (error) {
+        console.error("Failed to fetch provinces", error);
+      }
+    },
+
+    async fetchCities() {
+      if (this.formData.province) {
+        try {
+          const response = await axios.get(
+            `https://www.emsifa.com/api-wilayah-indonesia/api/regencies/${this.formData.province}.json`
+          );
+          this.cities = response.data;
+          this.districts = [];
+          this.villages = [];
+          this.formData.city = "";
+          this.formData.district = "";
+          this.formData.village = "";
+        } catch (error) {
+          console.error("Failed to fetch cities", error);
+        }
+      }
+    },
+
+    async fetchDistricts() {
+      if (this.formData.city) {
+        try {
+          const response = await axios.get(
+            `https://www.emsifa.com/api-wilayah-indonesia/api/districts/${this.formData.city}.json`
+          );
+          this.districts = response.data;
+          this.villages = [];
+          this.formData.district = "";
+          this.formData.village = "";
+        } catch (error) {
+          console.error("Failed to fetch districts", error);
+        }
+      }
+    },
+
+    async fetchVillages() {
+      if (this.formData.district) {
+        try {
+          const response = await axios.get(
+            `https://www.emsifa.com/api-wilayah-indonesia/api/villages/${this.formData.district}.json`
+          );
+          this.villages = response.data;
+        } catch (error) {
+          console.error("Failed to fetch villages", error);
+        }
+      }
+    },
+
+    async validateImage(event) {
+      const file = event.target.files[0];
+
+      if (!file) {
+        this.errors.idCardImage = "Please upload an ID card image.";
+        this.errors.kkImage = "Please upload an KK image.";
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        this.errors.idCardImage = "The image size must be less than 2MB.";
+        this.errors.kkImage = "The image size must be less than 2MB.";
+        return;
+      }
+
+      const validTypes = ["image/jpeg", "image/png", "image/bmp"];
+      if (!validTypes.includes(file.type)) {
+        this.errors.idCardImage =
+          "The image must be in JPG, JPEG, PNG, or BMP format.";
+        this.errors.kkImage =
+          "The image must be in JPG, JPEG, PNG, or BMP format.";
+        return;
+      }
+
+      this.errors.idCardImage = null;
+      this.formData.idCardImage = file;
+      this.errors.kkImage = null;
+      this.formData.kkImage = file;
+    },
+
+    async validateForm() {
+      this.errors = {};
+      if (!this.formData.name) {
+        this.errors.name = "Name is required";
+      }
+
+      if (!this.formData.idCard) {
+        this.errors.idCard = "NIK is required.";
+      } else if (!/^\d{8,16}$/.test(this.formData.idCard)) {
+        this.errors.idCard = "NIK must be between 8 and 16 digits.";
+      }
+
+      if (!this.formData.kk) {
+        this.errors.kk = "NIK is required.";
+      } else if (!/^\d{8,16}$/.test(this.formData.kk)) {
+        this.errors.kk = "NIK must be between 8 and 16 digits.";
+      }
+
+      if (!this.formData.idCardImage) {
+        this.errors.idCardImage = "Please upload a valid ID card image.";
+      }
+
+      if (!this.formData.kkImage) {
+        this.errors.kkImage = "Please upload a valid KK image.";
+      }
+
+      if (!this.formData.age || this.formData.age < 24) {
+        this.errors.age = "Age must be 25 or older";
+      }
+      if (!this.formData.gender) {
+        this.errors.gender = "Gender is required.";
+      }
+
+      if (!this.formData.province) {
+        this.errors.province = "Province is required";
+      }
+      if (!this.formData.city) {
+        this.errors.city = "City is required";
+      }
+      if (!this.formData.district) {
+        this.errors.district = "District is required";
+      }
+      if (!this.formData.village) {
+        this.errors.village = "Village is required";
+      }
+
+      if (!this.formData.address) {
+        this.errors.address = "Address is required.";
+      } else if (this.formData.address.length > 255) {
+        this.errors.address = "No longer than 255 characters";
+      }
+
+      if (!this.formData.income || this.formData.income < 0) {
+        this.errors.income = "Income must be a positive number.";
+      }
+
+      if (!this.formData.rt) {
+        this.errors.rt = "RT is required";
+      }
+      if (!this.formData.rw) {
+        this.errors.rw = "RW is required";
+      }
+      if (!this.formData.incomeBefore) {
+        this.errors.incomeBefore = "Income before pandemi is required";
+      }
+      if (!this.formData.incomeAfter) {
+        this.errors.incomeAfter = "Income after pandemi is required";
+      }
+
+      if (!this.formData.reason) {
+        this.errors.reason = "Reason is required.";
+      }
+
+      if (!this.formData.confirmation) {
+        this.errors.confirmation =
+          "You must declare that the data entered is correct";
+      }
+      return Object.keys(this.errors).length === 0;
+    },
+
+    async submitForm() {
+      if (this.validateForm()) {
+        this.isLoading = true;
+        this.serverError = "";
+        setTimeout(() => {
+          const serverSuccess = Math.random() < 0.7;
+
+          if (serverSuccess) {
+            alert("Form submitted successfully!");
+            this.isLoading = false;
+            this.$router.push({
+              path: "/preview",
+              query: {
+                name: this.formData.name,
+                idCard: this.formData.idCard,
+                kk: this.formData.kk,
+                idCardImage: this.formData.idCardImage,
+                kkImage: this.formData.kkImage,
+                age: this.formData.age,
+                gender: this.formData.gender,
+                province: this.formData.province,
+                city: this.formData.city,
+                district: this.formData.district,
+                village: this.formData.village,
+                address: this.formData.address,
+                rt: this.formData.rt,
+                rw: this.formData.rw,
+                incomeBefore: this.formData.incomeBefore,
+                incomeAfter: this.formData.incomeAfter,
+                reason: this.formData.reason,
+              },
+            });
+            resetForm();
+          } else {
+            this.isLoading = false;
+            this.serverError =
+              "Server error: The server is currently overloaded. Please try again later.";
+          }
+        }, 1500);
+      }
+      const resetForm = () => {
+        this.formData.name = "";
+        this.formData.idCard = "";
+        this.formData.kk = "";
+        this.formData.idCardImage = null;
+        this.formData.kkImage = null;
+        this.formData.age = "";
+        this.formData.gender = "";
+        this.formData.province = "";
+        this.formData.city = "";
+        this.formData.district = "";
+        this.formData.village = "";
+        this.formData.address = "";
+        this.formData.rt = null;
+        this.formData.rw = null;
+        this.formData.incomeBefore = null;
+        this.formData.incomeAfter = null;
+        this.formData.reason = "";
+        this.formData.confirmation = false;
+      };
+    },
+  },
+};
+</script>
+
+<style scoped>
+.form-container {
+  background-color: #f8f9fa;
+  padding: 6px 50px;
+  max-width: 600px;
+  margin: 10px auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+}
+span {
+  color: #e74c3c;
+  font-size: 12px;
+  margin-top: 5px;
+  display: block;
+}
+.loading {
+  color: blue;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+textarea.form-control {
+  resize: vertical;
+  height: 120px;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 12px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  .submit-button {
+    font-size: 16px;
+    padding: 10px 15px;
+  }
+}
+</style>
