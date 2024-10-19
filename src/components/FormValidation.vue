@@ -451,64 +451,69 @@ export default {
 
     async submitForm() {
       if (this.validateForm()) {
-        this.isLoading = true;
-        this.serverError = "";
-        setTimeout(() => {
-          const serverSuccess = Math.random() < 0.7;
+        try {
+          this.isLoading = true;
+          this.serverError = "";
+          setTimeout(() => {
+            const serverSuccess = Math.random() < 0.7;
 
-          if (serverSuccess) {
-            alert("Form submitted successfully!");
-            this.isLoading = false;
-            this.$router.push({
-              path: "/preview",
-              query: {
-                name: this.formData.name,
-                idCard: this.formData.idCard,
-                kk: this.formData.kk,
-                idCardImage: this.formData.idCardImage,
-                kkImage: this.formData.kkImage,
-                age: this.formData.age,
-                gender: this.formData.gender,
-                province: this.formData.province,
-                city: this.formData.city,
-                district: this.formData.district,
-                village: this.formData.village,
-                address: this.formData.address,
-                rt: this.formData.rt,
-                rw: this.formData.rw,
-                incomeBefore: this.formData.incomeBefore,
-                incomeAfter: this.formData.incomeAfter,
-                reason: this.formData.reason,
-              },
-            });
-            resetForm();
-          } else {
-            this.isLoading = false;
-            this.serverError =
-              "Server error: The server is currently overloaded. Please try again later.";
-          }
-        }, 1500);
+            if (serverSuccess) {
+              alert("Form submitted successfully!");
+              this.isLoading = false;
+              this.$router.push({
+                path: "/preview",
+                query: {
+                  name: this.formData.name,
+                  idCard: this.formData.idCard,
+                  kk: this.formData.kk,
+                  idCardImage: this.formData.idCardImage,
+                  kkImage: this.formData.kkImage,
+                  age: this.formData.age,
+                  gender: this.formData.gender,
+                  province: this.formData.province,
+                  city: this.formData.city,
+                  district: this.formData.district,
+                  village: this.formData.village,
+                  address: this.formData.address,
+                  rt: this.formData.rt,
+                  rw: this.formData.rw,
+                  incomeBefore: this.formData.incomeBefore,
+                  incomeAfter: this.formData.incomeAfter,
+                  reason: this.formData.reason,
+                },
+              });
+              resetForm();
+            } else {
+              this.isLoading = false;
+              this.serverError =
+                "Server error: The server is currently overloaded. Please try again later.";
+            }
+          }, 1500);
+          const resetForm = () => {
+            this.formData.name = "";
+            this.formData.idCard = "";
+            this.formData.kk = "";
+            this.formData.idCardImage = null;
+            this.formData.kkImage = null;
+            this.formData.age = "";
+            this.formData.gender = "";
+            this.formData.province = "";
+            this.formData.city = "";
+            this.formData.district = "";
+            this.formData.village = "";
+            this.formData.address = "";
+            this.formData.rt = null;
+            this.formData.rw = null;
+            this.formData.incomeBefore = null;
+            this.formData.incomeAfter = null;
+            this.formData.reason = "";
+            this.formData.confirmation = false;
+          };
+          console.log("Form submitted:", this.formData);
+        } catch (error) {
+          console.error("Error submitting form:", error);
+        }
       }
-      const resetForm = () => {
-        this.formData.name = "";
-        this.formData.idCard = "";
-        this.formData.kk = "";
-        this.formData.idCardImage = null;
-        this.formData.kkImage = null;
-        this.formData.age = "";
-        this.formData.gender = "";
-        this.formData.province = "";
-        this.formData.city = "";
-        this.formData.district = "";
-        this.formData.village = "";
-        this.formData.address = "";
-        this.formData.rt = null;
-        this.formData.rw = null;
-        this.formData.incomeBefore = null;
-        this.formData.incomeAfter = null;
-        this.formData.reason = "";
-        this.formData.confirmation = false;
-      };
     },
   },
 };
