@@ -35,11 +35,19 @@
         <input
           type="file"
           id="idCardImage"
-          @change="validateImage"
+          @change="handleImageUpload"
           accept="image/jpeg, image/png, image/bmp"
           class="form-control"
         />
         <span v-if="errors.idCardImage">{{ errors.idCardImage }}</span>
+      </div>
+
+      <div v-if="formData.idCardImagePreview" class="form-group">
+        <img
+          :src="formData.idCardImagePreview"
+          alt="ID Card Preview"
+          class="image-preview"
+        />
       </div>
 
       <div class="form-group">
@@ -47,11 +55,19 @@
         <input
           type="file"
           id="kkImage"
-          @change="validateImage"
+          @change="handleImage"
           accept="image/jpeg, image/png, image/bmp"
           class="form-control"
         />
         <span v-if="errors.kkImage">{{ errors.kkImage }}</span>
+      </div>
+
+      <div v-if="formData.kkImagePreview" class="form-group">
+        <img
+          :src="formData.kkImagePreview"
+          alt="KK Preview"
+          class="image-preview"
+        />
       </div>
 
       <div class="form-group">
@@ -253,7 +269,9 @@ export default {
         idCard: "",
         kk: "",
         idCardImage: null,
+        idCardImagePreview: null,
         kkImage: null,
+        kkImagePreview: null,
         age: "",
         gender: "",
         province: "",
@@ -339,34 +357,46 @@ export default {
       }
     },
 
-    async validateImage(event) {
+    handleImageUpload(event) {
       const file = event.target.files[0];
-
-      if (!file) {
-        this.errors.idCardImage = "Please upload an ID card image.";
-        this.errors.kkImage = "Please upload an KK image.";
-        return;
+      if (file && this.validate(file)) {
+        this.formData.idCardImage = file;
+        this.formData.idCardImagePreview = URL.createObjectURL(file); // Preview the uploaded image
+      } else {
+        this.formData.idCardImage = null;
+        this.formData.idCardImagePreview = null;
       }
+    },
 
-      if (file.size > 2 * 1024 * 1024) {
-        this.errors.idCardImage = "The image size must be less than 2MB.";
-        this.errors.kkImage = "The image size must be less than 2MB.";
-        return;
+    handleImage(event) {
+      const file = event.target.files[0];
+      if (file && this.validate(file)) {
+        this.formData.kkImage = file;
+        this.formData.kkImagePreview = URL.createObjectURL(file);
+      } else {
+        this.formData.kkImage = null;
+        this.formData.kkImagePreview = null;
       }
+    },
 
-      const validTypes = ["image/jpeg", "image/png", "image/bmp"];
-      if (!validTypes.includes(file.type)) {
-        this.errors.idCardImage =
-          "The image must be in JPG, JPEG, PNG, or BMP format.";
-        this.errors.kkImage =
-          "The image must be in JPG, JPEG, PNG, or BMP format.";
-        return;
+    validate(file) {
+      const maxSizeMB = 2;
+      const validFormats = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/bmp",
+      ];
+      const fileSizeMB = file.size / 1024 / 1024;
+
+      if (fileSizeMB > maxSizeMB || !validFormats.includes(file.type)) {
+        this.errors.idCardImage = true;
+        this.errors.kkImage = true;
+        return false;
       }
-
-      this.errors.idCardImage = null;
-      this.formData.idCardImage = file;
-      this.errors.kkImage = null;
-      this.formData.kkImage = file;
+      this.errors.idCardImage = false;
+      this.errors.kkmage = false;
+      return true;
     },
 
     async validateForm() {
@@ -376,15 +406,15 @@ export default {
       }
 
       if (!this.formData.idCard) {
-        this.errors.idCard = "NIK is required.";
+        this.errors.idCard = "NIK is required";
       } else if (!/^\d{8,16}$/.test(this.formData.idCard)) {
         this.errors.idCard = "NIK must be between 8 and 16 digits.";
       }
 
       if (!this.formData.kk) {
-        this.errors.kk = "NIK is required.";
+        this.errors.kk = "KK is required.";
       } else if (!/^\d{8,16}$/.test(this.formData.kk)) {
-        this.errors.kk = "NIK must be between 8 and 16 digits.";
+        this.errors.kk = "KK must be between 8 and 16 digits.";
       }
 
       if (!this.formData.idCardImage) {
@@ -450,12 +480,12 @@ export default {
     },
 
     async submitForm() {
-      if (this.validateForm()) {
-        try {
+      try {
+        if (this.validateForm()) {
           this.isLoading = true;
           this.serverError = "";
           setTimeout(() => {
-            const serverSuccess = Math.random() < 0.7;
+            const serverSuccess = Math.random() > 0.7;
 
             if (serverSuccess) {
               alert("Form submitted successfully!");
@@ -467,7 +497,9 @@ export default {
                   idCard: this.formData.idCard,
                   kk: this.formData.kk,
                   idCardImage: this.formData.idCardImage,
+                  idCardImagePreview: this.formData.idCardImagePreview,
                   kkImage: this.formData.kkImage,
+                  kkImagePreview: this.formData.kkImagePreview,
                   age: this.formData.age,
                   gender: this.formData.gender,
                   province: this.formData.province,
@@ -482,37 +514,38 @@ export default {
                   reason: this.formData.reason,
                 },
               });
-              resetForm();
+              // resetForm();
             } else {
               this.isLoading = false;
               this.serverError =
                 "Server error: The server is currently overloaded. Please try again later.";
             }
           }, 1500);
-          const resetForm = () => {
-            this.formData.name = "";
-            this.formData.idCard = "";
-            this.formData.kk = "";
-            this.formData.idCardImage = null;
-            this.formData.kkImage = null;
-            this.formData.age = "";
-            this.formData.gender = "";
-            this.formData.province = "";
-            this.formData.city = "";
-            this.formData.district = "";
-            this.formData.village = "";
-            this.formData.address = "";
-            this.formData.rt = null;
-            this.formData.rw = null;
-            this.formData.incomeBefore = null;
-            this.formData.incomeAfter = null;
-            this.formData.reason = "";
-            this.formData.confirmation = false;
-          };
-          console.log("Form submitted:", this.formData);
-        } catch (error) {
-          console.error("Error submitting form:", error);
         }
+        // const resetForm = () => {
+        //   this.formData.name = "";
+        //   this.formData.idCard = "";
+        //   this.formData.kk = "";
+        //   this.formData.idCardImage = null;
+        //   this.formData.idCardImagePreview = null;
+        //   this.formData.kkImage = null;
+        //   this.formData.age = "";
+        //   this.formData.gender = "";
+        //   this.formData.province = "";
+        //   this.formData.city = "";
+        //   this.formData.district = "";
+        //   this.formData.village = "";
+        //   this.formData.address = "";
+        //   this.formData.rt = null;
+        //   this.formData.rw = null;
+        //   this.formData.incomeBefore = null;
+        //   this.formData.incomeAfter = null;
+        //   this.formData.reason = "";
+        //   this.formData.confirmation = false;
+        // };
+        console.log("Form submitted:", this.formData);
+      } catch (error) {
+        console.error("Error submitting form:", error);
       }
     },
   },
@@ -552,6 +585,12 @@ span {
   color: blue;
   margin-top: 10px;
   font-style: italic;
+}
+.image-preview {
+  width: 100px;
+  height: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .form-control {

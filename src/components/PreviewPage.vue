@@ -20,13 +20,25 @@
           <td>Nomor Kartu Keluarga</td>
           <td>: {{ kk }}</td>
         </tr>
-        <tr>
+        <tr v-if="idCardImagePreview">
           <td>Foto KTP</td>
-          <td>: {{ idCardImage }}</td>
+          <td>
+            <img
+              :src="idCardImagePreview"
+              alt="Submitted ID Card Image"
+              class="image-preview"
+            />
+          </td>
         </tr>
-        <tr>
+        <tr v-if="kkImagePreview">
           <td>Foto Kartu Keluarga</td>
-          <td>: {{ kkImage }}</td>
+          <td>
+            <img
+              :src="kkImagePreview"
+              alt="Submitted KK Image"
+              class="image-preview"
+            />
+          </td>
         </tr>
         <tr>
           <td>Umur</td>
@@ -90,7 +102,9 @@ export default {
     "idCard",
     "kk",
     "idCardImage",
+    "idCardImagePreview",
     "kkImage",
+    "kkImagePreview",
     "age",
     "gender",
     "province",
@@ -159,5 +173,10 @@ h2 {
 .styled-table tbody tr:hover {
   background-color: #f1f1f1;
   transition: background-color 0.2s ease;
+}
+.image-preview {
+  width: 100px;
+  height: auto;
+  margin: 10px 30px;
 }
 </style>
