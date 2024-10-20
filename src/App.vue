@@ -16,5 +16,19 @@
 }
 img {
   margin-bottom: -33px;
+  max-width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  #app {
+    margin-top: 5px;
+    padding: 0 20px;
+  }
+
+  img {
+    width: 80%;
+    margin-bottom: -20px;
+  }
 }
 </style>

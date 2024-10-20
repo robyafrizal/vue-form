@@ -650,20 +650,29 @@ span {
 .submit-button:hover:not(:disabled) {
   background-color: #0056b3;
 }
-
 @media (max-width: 768px) {
   .form-container {
-    padding: 20px;
-    margin: 20px auto;
+    padding: 6px 20px;
+    max-width: 100%;
+    box-shadow: none;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
   }
 
   .form-group {
     margin-bottom: 15px;
   }
 
+  .form-control {
+    font-size: 14px;
+  }
+
   .submit-button {
-    font-size: 16px;
-    padding: 10px 15px;
+    width: 100%;
+    font-size: 18px;
   }
 }
 </style>

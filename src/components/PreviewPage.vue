@@ -196,6 +196,30 @@ h2 {
   .preview-page {
     padding: 20px;
     margin: 20px auto;
+    width: 90%;
+  }
+
+  .styled-table {
+    font-size: 16px;
+  }
+
+  .image-preview {
+    width: 80px;
+    margin: 10px 0;
+  }
+
+  td {
+    display: block;
+    text-align: center;
+  }
+
+  .styled-table tbody tr td:first-child {
+    font-weight: bold;
+  }
+
+  .link {
+    width: 100%;
+    padding: 12px;
   }
 }
 </style>
