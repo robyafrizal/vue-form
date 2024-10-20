@@ -8,6 +8,7 @@
           v-model="formData.name"
           type="text"
           id="name"
+          placeholder="Masukkan nama"
           class="form-control"
         />
         <span v-if="errors.name">{{ errors.name }}</span>
@@ -19,6 +20,7 @@
           v-model="formData.idCard"
           type="text"
           id="idCard"
+          placeholder="Masukkan NIK"
           class="form-control"
         />
         <span v-if="errors.idCard">{{ errors.idCard }}</span>
@@ -26,7 +28,13 @@
 
       <div class="form-group">
         <label for="kk">Nomor Kartu Keluarga</label>
-        <input v-model="formData.kk" type="text" id="kk" class="form-control" />
+        <input
+          v-model="formData.kk"
+          type="text"
+          id="kk"
+          placeholder="Masukkan Nomor Kartu Keluarga"
+          class="form-control"
+        />
         <span v-if="errors.kk">{{ errors.kk }}</span>
       </div>
 
@@ -82,6 +90,7 @@
           v-model="formData.age"
           type="number"
           id="age"
+          placeholder="Masukkan umur"
           class="form-control"
         />
         <span v-if="errors.age">{{ errors.age }}</span>
@@ -248,7 +257,7 @@
           <input v-model="formData.confirmation" type="checkbox" />
           “Saya menyatakan bahwa data yang diisikan adalah benar dan siap
           mempertanggungjawabkan apabila ditemukan ketidaksesuaian dalam data
-          tersebut.”
+          tersebut”
         </label>
         <span v-if="errors.confirmation">{{ errors.confirmation }}</span>
       </div>
@@ -621,15 +630,16 @@ span {
 }
 
 .submit-button {
-  width: 100%;
+  width: 30%;
   padding: 12px 20px;
   background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  margin-bottom: 30px;
 }
 
 .submit-button:disabled {
@@ -641,7 +651,6 @@ span {
   background-color: #0056b3;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
   .form-container {
     padding: 20px;

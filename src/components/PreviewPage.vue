@@ -65,7 +65,7 @@
           <td>: {{ village }}</td>
         </tr>
         <tr>
-          <td>Address</td>
+          <td>Alamat</td>
           <td>: {{ address }}</td>
         </tr>
         <tr>
@@ -91,7 +91,7 @@
       </tbody>
     </table>
 
-    <router-link to="/">Go Back to Form</router-link>
+    <router-link to="/" class="link">Go Back to Form</router-link>
   </div>
 </template>
 
@@ -128,13 +128,13 @@ export default {
   background-color: #f8f9fa;
   padding: 30px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
   text-align: center;
-  margin-bottom: 20px;
-  margin-top: -10px;
+  margin-bottom: 40px;
+  margin-top: -5px;
 }
 .styled-table {
   width: 100%;
@@ -178,5 +178,24 @@ h2 {
   width: 100px;
   height: auto;
   margin: 10px 30px;
+}
+.link {
+  text-decoration: none;
+  color: #007bff;
+  padding: 10px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.link:hover {
+  background-color: #f0f0f0;
+  color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .preview-page {
+    padding: 20px;
+    margin: 20px auto;
+  }
 }
 </style>
