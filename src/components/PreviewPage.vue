@@ -10,15 +10,15 @@
       <tbody>
         <tr>
           <td>Nama</td>
-          <td>: {{ name }}</td>
+          <td>{{ name }}</td>
         </tr>
         <tr>
           <td>NIK</td>
-          <td>: {{ idCard }}</td>
+          <td>{{ idCard }}</td>
         </tr>
         <tr>
           <td>Nomor Kartu Keluarga</td>
-          <td>: {{ kk }}</td>
+          <td>{{ kk }}</td>
         </tr>
         <tr v-if="idCardImagePreview">
           <td>Foto KTP</td>
@@ -42,51 +42,51 @@
         </tr>
         <tr>
           <td>Umur</td>
-          <td>: {{ age }}</td>
+          <td>{{ age }}</td>
         </tr>
         <tr>
           <td>Jenis Kelamin</td>
-          <td>: {{ gender }}</td>
+          <td>{{ gender }}</td>
         </tr>
         <tr>
           <td>Provinsi</td>
-          <td>: {{ province }}</td>
+          <td>{{ province }}</td>
         </tr>
         <tr>
           <td>Kota</td>
-          <td>: {{ city }}</td>
+          <td>{{ city }}</td>
         </tr>
         <tr>
           <td>Kecamatan</td>
-          <td>: {{ district }}</td>
+          <td>{{ district }}</td>
         </tr>
         <tr>
           <td>Kelurahan</td>
-          <td>: {{ village }}</td>
+          <td>{{ village }}</td>
         </tr>
         <tr>
           <td>Alamat</td>
-          <td>: {{ address }}</td>
+          <td>{{ address }}</td>
         </tr>
         <tr>
           <td>RT</td>
-          <td>: {{ rt }}</td>
+          <td>{{ rt }}</td>
         </tr>
         <tr>
           <td>RW</td>
-          <td>: {{ rw }}</td>
+          <td>{{ rw }}</td>
         </tr>
         <tr>
           <td>Pendapatan Sebelum Pandemi</td>
-          <td>: {{ incomeBefore }}</td>
+          <td>{{ incomeBefore }}</td>
         </tr>
         <tr>
           <td>Pendapatan Setelah Pandemi</td>
-          <td>: {{ incomeAfter }}</td>
+          <td>{{ incomeAfter }}</td>
         </tr>
         <tr>
           <td>Alasan Butuh Bantuan</td>
-          <td>: {{ reason }}</td>
+          <td>{{ reason }}</td>
         </tr>
       </tbody>
     </table>
