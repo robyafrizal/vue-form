@@ -4,24 +4,28 @@
     <table class="styled-table">
       <thead>
         <tr>
-          <th colspan="2">Data Penerima Bantuan Sosial</th>
+          <th colspan="3">Data Penerima Bantuan Sosial</th>
         </tr>
       </thead>
       <tbody>
         <tr>
           <td>Nama</td>
+          <td class="titikdua">:</td>
           <td>{{ name }}</td>
         </tr>
         <tr>
           <td>NIK</td>
+          <td class="titikdua">:</td>
           <td>{{ idCard }}</td>
         </tr>
         <tr>
           <td>Nomor Kartu Keluarga</td>
+          <td class="titikdua">:</td>
           <td>{{ kk }}</td>
         </tr>
         <tr v-if="idCardImagePreview">
           <td>Foto KTP</td>
+          <td class="titikdua">:</td>
           <td>
             <img
               :src="idCardImagePreview"
@@ -32,6 +36,7 @@
         </tr>
         <tr v-if="kkImagePreview">
           <td>Foto Kartu Keluarga</td>
+          <td class="titikdua">:</td>
           <td>
             <img
               :src="kkImagePreview"
@@ -42,50 +47,62 @@
         </tr>
         <tr>
           <td>Umur</td>
+          <td class="titikdua">:</td>
           <td>{{ age }}</td>
         </tr>
         <tr>
           <td>Jenis Kelamin</td>
+          <td class="titikdua">:</td>
           <td>{{ gender }}</td>
         </tr>
         <tr>
           <td>Provinsi</td>
+          <td class="titikdua">:</td>
           <td>{{ province }}</td>
         </tr>
         <tr>
           <td>Kota</td>
+          <td class="titikdua">:</td>
           <td>{{ city }}</td>
         </tr>
         <tr>
           <td>Kecamatan</td>
+          <td class="titikdua">:</td>
           <td>{{ district }}</td>
         </tr>
         <tr>
           <td>Kelurahan</td>
+          <td class="titikdua">:</td>
           <td>{{ village }}</td>
         </tr>
         <tr>
           <td>Alamat</td>
+          <td class="titikdua">:</td>
           <td>{{ address }}</td>
         </tr>
         <tr>
           <td>RT</td>
+          <td class="titikdua">:</td>
           <td>{{ rt }}</td>
         </tr>
         <tr>
           <td>RW</td>
+          <td class="titikdua">:</td>
           <td>{{ rw }}</td>
         </tr>
         <tr>
           <td>Pendapatan Sebelum Pandemi</td>
+          <td class="titikdua">:</td>
           <td>{{ incomeBefore }}</td>
         </tr>
         <tr>
           <td>Pendapatan Setelah Pandemi</td>
+          <td class="titikdua">:</td>
           <td>{{ incomeAfter }}</td>
         </tr>
         <tr>
           <td>Alasan Butuh Bantuan</td>
+          <td class="titikdua">:</td>
           <td>{{ reason }}</td>
         </tr>
       </tbody>
@@ -135,6 +152,9 @@ h2 {
   text-align: center;
   margin-bottom: 40px;
   margin-top: -5px;
+}
+.titikdua {
+  text-align: end;
 }
 .styled-table {
   width: 100%;
@@ -198,25 +218,23 @@ h2 {
     margin: 20px auto;
     width: 90%;
   }
-
+  .titikdua {
+    display: none;
+  }
   .styled-table {
     font-size: 16px;
   }
-
   .image-preview {
     width: 80px;
     margin: 10px 0;
   }
-
   td {
     display: block;
     text-align: center;
   }
-
   .styled-table tbody tr td:first-child {
     font-weight: bold;
   }
-
   .link {
     width: 100%;
     padding: 12px;
