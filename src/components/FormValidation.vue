@@ -42,7 +42,10 @@
         <span v-if="errors.idCardImage">{{ errors.idCardImage }}</span>
       </div>
 
-      <div v-if="formData.idCardImagePreview" class="form-group">
+      <div
+        v-if="formData.idCardImagePreview"
+        class="form-group image-preview-container"
+      >
         <img
           :src="formData.idCardImagePreview"
           alt="ID Card Preview"
@@ -62,7 +65,10 @@
         <span v-if="errors.kkImage">{{ errors.kkImage }}</span>
       </div>
 
-      <div v-if="formData.kkImagePreview" class="form-group">
+      <div
+        v-if="formData.kkImagePreview"
+        class="form-group image-preview-container"
+      >
         <img
           :src="formData.kkImagePreview"
           alt="KK Preview"
@@ -252,7 +258,7 @@
       <div v-if="serverError" class="error">{{ serverError }}</div>
 
       <button type="submit" class="submit-button" :disabled="isLoading">
-        Submit
+        Kirim
       </button>
     </form>
   </div>
@@ -361,7 +367,7 @@ export default {
       const file = event.target.files[0];
       if (file && this.validate(file)) {
         this.formData.idCardImage = file;
-        this.formData.idCardImagePreview = URL.createObjectURL(file); // Preview the uploaded image
+        this.formData.idCardImagePreview = URL.createObjectURL(file);
       } else {
         this.formData.idCardImage = null;
         this.formData.idCardImagePreview = null;
@@ -390,8 +396,10 @@ export default {
       const fileSizeMB = file.size / 1024 / 1024;
 
       if (fileSizeMB > maxSizeMB || !validFormats.includes(file.type)) {
-        this.errors.idCardImage = true;
-        this.errors.kkImage = true;
+        this.errors.idCardImage =
+          "Foto KTP harus diisi (Max: 2MB, format JPG/JPEG/PNG/BMP)";
+        this.errors.kkImage =
+          "Foto KK harus diisi (Max: 2MB, format JPG/JPEG/PNG/BMP)";
         return false;
       }
       this.errors.idCardImage = false;
@@ -402,79 +410,79 @@ export default {
     async validateForm() {
       this.errors = {};
       if (!this.formData.name) {
-        this.errors.name = "Name is required";
+        this.errors.name = "Nama harus diisi";
       }
 
       if (!this.formData.idCard) {
-        this.errors.idCard = "NIK is required";
-      } else if (!/^\d{8,16}$/.test(this.formData.idCard)) {
-        this.errors.idCard = "NIK must be between 8 and 16 digits.";
+        this.errors.idCard = "NIK harus diisi";
+      } else if (!/^\d{16}$/.test(this.formData.idCard)) {
+        this.errors.idCard = "NIK harus terdiri dari 16 digit";
       }
 
       if (!this.formData.kk) {
         this.errors.kk = "KK is required.";
       } else if (!/^\d{8,16}$/.test(this.formData.kk)) {
-        this.errors.kk = "KK must be between 8 and 16 digits.";
+        this.errors.kk = "KK harus terdiri dari 16 digit";
       }
 
       if (!this.formData.idCardImage) {
-        this.errors.idCardImage = "Please upload a valid ID card image.";
+        this.errors.idCardImage = "Silahkan upload gambar KTP yang benar";
       }
 
       if (!this.formData.kkImage) {
-        this.errors.kkImage = "Please upload a valid KK image.";
+        this.errors.kkImage = "Silahkan upload gambar KK yang benar";
       }
 
       if (!this.formData.age || this.formData.age < 24) {
-        this.errors.age = "Age must be 25 or older";
+        this.errors.age = "Berumur lebih dari atau sama dengan 25 tahun";
       }
       if (!this.formData.gender) {
-        this.errors.gender = "Gender is required.";
+        this.errors.gender = "Jenis kelamin harus diisi";
       }
 
       if (!this.formData.province) {
-        this.errors.province = "Province is required";
+        this.errors.province = "Provinsi harus diisi";
       }
       if (!this.formData.city) {
-        this.errors.city = "City is required";
+        this.errors.city = "Kabupaten/Kota harus diisi";
       }
       if (!this.formData.district) {
-        this.errors.district = "District is required";
+        this.errors.district = "Kecamatan harus diisi";
       }
       if (!this.formData.village) {
-        this.errors.village = "Village is required";
+        this.errors.village = "Kelurahan harus diisi";
       }
 
       if (!this.formData.address) {
-        this.errors.address = "Address is required.";
+        this.errors.address = "Alamat harus diisi";
       } else if (this.formData.address.length > 255) {
         this.errors.address = "No longer than 255 characters";
       }
 
       if (!this.formData.income || this.formData.income < 0) {
-        this.errors.income = "Income must be a positive number.";
+        this.errors.income = "Tidak lebih panjang dari 255 karakter";
       }
 
       if (!this.formData.rt) {
-        this.errors.rt = "RT is required";
+        this.errors.rt = "RT harus diisi";
       }
       if (!this.formData.rw) {
-        this.errors.rw = "RW is required";
+        this.errors.rw = "RW harus diisi";
       }
       if (!this.formData.incomeBefore) {
-        this.errors.incomeBefore = "Income before pandemi is required";
+        this.errors.incomeBefore = "Income before pandemi harus diisi";
       }
       if (!this.formData.incomeAfter) {
-        this.errors.incomeAfter = "Income after pandemi is required";
+        this.errors.incomeAfter = "Income after harus diisi";
       }
 
       if (!this.formData.reason) {
-        this.errors.reason = "Reason is required.";
+        this.errors.reason = "Alasan butuh bantuan harus diisi";
       }
 
       if (!this.formData.confirmation) {
         this.errors.confirmation =
-          "You must declare that the data entered is correct";
+          "Sebelum data di-submit, staf Kepala Daerah harus mencentang kolom ini";
       }
       return Object.keys(this.errors).length === 0;
     },
@@ -488,7 +496,7 @@ export default {
             const serverSuccess = Math.random() > 0.7;
 
             if (serverSuccess) {
-              alert("Form submitted successfully!");
+              alert("Formulir berhasil dikirim");
               this.isLoading = false;
               this.$router.push({
                 path: "/preview",
@@ -518,7 +526,7 @@ export default {
             } else {
               this.isLoading = false;
               this.serverError =
-                "Server error: The server is currently overloaded. Please try again later.";
+                "Terjadi Interval Server Error akibat server load yang terlalu tinggi. Silahkan coba lagi";
             }
           }, 1500);
         }
@@ -543,9 +551,9 @@ export default {
         //   this.formData.reason = "";
         //   this.formData.confirmation = false;
         // };
-        console.log("Form submitted:", this.formData);
+        console.log("Formulir terkirim", this.formData);
       } catch (error) {
-        console.error("Error submitting form:", error);
+        console.error("Error ketika megirim formulir", error);
       }
     },
   },
@@ -558,8 +566,8 @@ export default {
   padding: 6px 50px;
   max-width: 600px;
   margin: 10px auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 h2 {
@@ -586,6 +594,9 @@ span {
   margin-top: 10px;
   font-style: italic;
 }
+.image-preview-container {
+  margin-top: 15px;
+}
 .image-preview {
   width: 100px;
   height: auto;
@@ -600,17 +611,13 @@ span {
   border-radius: 5px;
   font-size: 16px;
   transition: border-color 0.3s ease;
+  box-sizing: border-box;
 }
 
 .form-control:focus {
   border-color: #007bff;
   outline: none;
   box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
-}
-
-textarea.form-control {
-  resize: vertical;
-  height: 120px;
 }
 
 .submit-button {
@@ -625,7 +632,12 @@ textarea.form-control {
   transition: background-color 0.3s ease;
 }
 
-.submit-button:hover {
+.submit-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.submit-button:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
@@ -633,6 +645,11 @@ textarea.form-control {
 @media (max-width: 768px) {
   .form-container {
     padding: 20px;
+    margin: 20px auto;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
   }
 
   .submit-button {
